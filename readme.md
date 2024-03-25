@@ -30,7 +30,7 @@ Here's a glimpse of our food delivery system in action:
 ### Routing Process
 Our backend algorithm intelligently selects the most efficient routes for food delivery, ensuring timely service and minimal fuel consumption.
 
-![Routing Process](./assets/landing_page.png)
+![Routing Process](./assets/Routing.png)
 
 ### Landing Page
 Our landing page provides a seamless user experience, showcasing our services and encouraging users to explore further.
