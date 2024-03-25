@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Search</title>
+    <!-- Include Tailwind CSS -->
+    
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <style>
+        /* Custom CSS for suggestions dropdown */
+        .suggestion-item {
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f3f4f6;
+        }
+    </style>
+    <style>
+        /* Define CSS styles for the map container */
+        #mapContainer {
+            width: 100%;
+            height: 600px;
+            /* Adjust height as needed */
+            
+            /* Fallback background color */
+            
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 py-8 px-4">
+    
+
+
+    <!-- component -->
+    <div class="flex bg-gray-100">
+        <div class="m-auto">
+            <div>
+                <button type="button"
+                    class="relative w-full flex justify-center items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-900  focus:outline-none   transition duration-300 transform active:scale-95 ease-in-out">
+                    <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
+                        viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                        <g>
+                            <rect fill="none" height="24" width="24"></rect>
+                        </g>
+                        <g>
+                            <g>
+                                <path d="M19,13h-6v6h-2v-6H5v-2h6V5h2v6h6V13z"></path>
+                            </g>
+                        </g>
+                    </svg>
+                    <span class="pl-2 mx-1">Create new Delivery label</span>
+                </button>
+                <div class="mt-5 bg-white rounded-lg shadow">
+                    <div class="flex">
+                        <div class="flex-1 py-5 pl-5 overflow-hidden">
+                            <svg class="inline align-text-top" height="24px" viewBox="0 0 24 24" width="24px"
+                                xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                                <g>
+                                    <path d="m4.88889,2.07407l14.22222,0l0,20l-14.22222,0l0,-20z" fill="none" id="svg_1"
+                                        stroke="null"></path>
+                                    <path
+                                        d="m7.07935,0.05664c-3.87,0 -7,3.13 -7,7c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zm-5,7c0,-2.76 2.24,-5 5,-5s5,2.24 5,5c0,2.88 -2.88,7.19 -5,9.88c-2.08,-2.67 -5,-7.03 -5,-9.88z"
+                                        id="svg_2"></path>
+                                    <circle cx="7.04807" cy="6.97256" r="2.5" id="svg_3"></circle>
+                                </g>
+                            </svg>
+                            <h1 class="inline text-2xl font-semibold leading-none">Sender</h1>
+                        </div>
+                    </div>
+                    <!-- Starting Location Input -->
+                    <div class="relative p-3">
+                        <input id="startingLocation" type="text" placeholder="Starting Location"
+                            class="w-full py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                        <div id="startingSuggestions"
+                            class="absolute z-10 bg-white border border-gray-300 w-full mt-1 rounded-b-md shadow-lg hidden"></div>
+                    </div>
+                    <div class="flex">
+                        <div class="flex-1 py-5 pl-5 overflow-hidden">
+                            <svg class="inline align-text-top" width="21" height="20.5"
+                                xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                                <g>
+                                    <path d="m4.88889,2.07407l14.22222,0l0,20l-14.22222,0l0,-20z" fill="none" id="svg_1"
+                                        stroke="null"></path>
+                                    <path
+                                        d="m7.07935,0.05664c-3.87,0 -7,3.13 -7,7c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zm-5,7c0,-2.76 2.24,-5 5,-5s5,2.24 5,5c0,2.88 -2.88,7.19 -5,9.88c-2.08,-2.67 -5,-7.03 -5,-9.88z"
+                                        id="svg_2"></path>
+                                    <circle cx="7.04807" cy="6.97256" r="2.5" id="svg_3"></circle>
+                                </g>
+                            </svg>
+                            <h1 class="inline text-2xl font-semibold leading-none">Receiver</h1>
+                        </div>
+                        <div class="flex-none pt-2.5 pr-2.5 pl-1"></div>
+                    </div>
+                    <div class="relative mt-4 p-3">
+                        <input id="endingLocation" type="text" placeholder="Ending Location"
+                            class="w-full py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                        <div id="endingSuggestions"
+                            class="absolute z-10 bg-white border border-gray-300 w-full mt-1 rounded-b-md shadow-lg hidden"></div>
+                    </div>
+                    <hr class="mt-4">
+                    <div class="flex flex-row-reverse p-3">
+                        <div class="flex-initial pl-3">
+                            <button type="button"
+                                class="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-800  focus:outline-none focus:bg-gray-900  transition duration-300 transform active:scale-95 ease-in-out" onclick="route()">
+                                <img src="{{ url_for('static', filename='route.svg') }}" alt="route"
+                                    class="w-6 h-6">
+                                <span class="pl-2 mx-1">Route</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mapContainer" class="my-10 md-2 p-4 "></div>
+    </div>
+
+
+
+
+
+
+    
+
+    <!-- JavaScript code -->
+    <script>
+        const startingInput = document.getElementById('startingLocation');
+        const endingInput = document.getElementById('endingLocation');
+        const startingSuggestionsList = document.getElementById('startingSuggestions');
+        const endingSuggestionsList = document.getElementById('endingSuggestions');
+        const apiUrl = 'https://autosuggest.search.hereapi.com/v1/autosuggest';
+        const apiKey = 'RnT7OP_hdKMQVJ90vdrXuMMfGvfJEgibHgBoVf1_pPo';
+        const loc = '28.749472,77.0561';
+        const language = 'en';
+        const limit = 5;
+        const termsLimit = 3;
+
+        // Function to fetch suggestions
+        function fetchStartingSuggestions(input, suggestionsList) {
+            const query = input.value.trim();
+            if (query.length === 0) {
+                suggestionsList.innerHTML = '';
+                return;
+            }
+            const url = `${apiUrl}?q=${query}&at=${loc}&lang=${language}&limit=${limit}&termsLimit=${termsLimit}&apiKey=${apiKey}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Clear previous suggestions
+                    suggestionsList.innerHTML = '';
+
+                    // Extract suggestions from the response and add them to the suggestions list
+                    data.items.forEach(item => {
+                        // Create a div element for each suggestion
+                        const suggestionDiv = document.createElement('div');
+                        suggestionDiv.textContent = item.title;
+
+                        // Add a class to the suggestion div
+                        suggestionDiv.classList.add('suggestion-item');
+
+                        // Handle suggestion selection
+                        suggestionDiv.addEventListener('click', () => {
+                            // Log selected data to console
+                            console.log('Selected:', item.position, item.title);
+                            
+                            
+                            origin = item.position;
+                            // Display selected data in the input box
+                            input.value = item.title;
+                            // Hide suggestions dropdown
+                            suggestionsList.classList.add('hidden');
+                        });
+
+                        // Append the suggestion div to the suggestions list container
+                        suggestionsList.appendChild(suggestionDiv);
+                    });
+                    suggestionsList.classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+        }
+
+        function fetchEndingSuggestions(input, suggestionsList) {
+            const query = input.value.trim();
+            if (query.length === 0) {
+                suggestionsList.innerHTML = '';
+                return;
+            }
+            const url = `${apiUrl}?q=${query}&at=${loc}&lang=${language}&limit=${limit}&termsLimit=${termsLimit}&apiKey=${apiKey}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Clear previous suggestions
+                    suggestionsList.innerHTML = '';
+
+                    // Extract suggestions from the response and add them to the suggestions list
+                    data.items.forEach(item => {
+                        // Create a div element for each suggestion
+                        const suggestionDiv = document.createElement('div');
+                        suggestionDiv.textContent = item.title;
+
+                        // Add a class to the suggestion div
+                        suggestionDiv.classList.add('suggestion-item');
+
+                        // Handle suggestion selection
+                        suggestionDiv.addEventListener('click', () => {
+                            // Log selected data to console
+                            console.log('Selected:', item.position, item.title);
+
+                            destination = item.position;
+                            // Display selected data in the input box
+                            input.value = item.title;
+                            // Hide suggestions dropdown
+                            suggestionsList.classList.add('hidden');
+                        });
+
+                        // Append the suggestion div to the suggestions list container
+                        suggestionsList.appendChild(suggestionDiv);
+                    });
+                    suggestionsList.classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
+        }
+
+        // Event listener for starting location input
+        startingInput.addEventListener('input', function () {
+            fetchStartingSuggestions(startingInput, startingSuggestionsList);
+        });
+
+        // Event listener for ending location input
+        endingInput.addEventListener('input', function () {
+            fetchEndingSuggestions(endingInput, endingSuggestionsList);
+        });
+
+
+        // Initiate and authenticate your connection to the HERE platform:
+        const platform = new H.service.Platform({
+            'apikey': 'IWkZZG8yg7_sabfcdfXNKPSM5vnzmShxTHVPipi99XE'
+        });
+
+        // Obtain the default map types from the platform object:
+        const defaultLayers = platform.createDefaultLayers();
+
+        // Instantiate (and display) a map:
+        // Zoom and center parameters are overriden by the bounding box
+        // that contains the route and marker objects
+        const map = new H.Map(
+            document.getElementById("mapContainer"),
+            defaultLayers.vector.normal.map, {
+            zoom: 7,
+            center: { lat: 56.97, lng: 24.09 },
+            // Add space around the map edges to ensure markers are not cut off:
+            padding: { top: 50, right: 50, bottom: 50, left: 50 }
+        });
+        grp = new H.map.Group();
+        map.addObject(grp)
+        prevgroup = grp
+
+        function route() {
+            console.log(origin, destination);
+            // Create the parameters for the routing request:
+            const routingParameters = {
+                'routingMode': 'fast',
+                'transportMode': 'car',
+                // The start point of the route:
+                'origin': `${origin.lat},${origin.lng}`,
+                // The end point of the route:
+                'destination': `${destination.lat},${destination.lng}`,
+                // Include the route shape in the response
+                'return': 'polyline',
+            };
+
+            // Define a callback function to process the routing response:
+            const onResult = function (result) {
+                // Ensure that at least one route was found
+                if (result.routes.length) {
+                    const lineStrings = [];
+                    result.routes[0].sections.forEach((section) => {
+                        // Create a linestring to use as a point source for the route line
+                        lineStrings.push(H.geo.LineString.fromFlexiblePolyline(section.polyline));
+                    });
+
+                    // Create an instance of H.geo.MultiLineString
+                    const multiLineString = new H.geo.MultiLineString(lineStrings);
+
+                    // Create a polyline to display the route:
+                    const routeLine = new H.map.Polyline(multiLineString, {
+                        style: {
+                            strokeColor: 'blue',
+                            lineWidth: 3
+                        }
+                    });
+
+                    // Create a marker for the start point:
+                    const startMarker = new H.map.Marker(origin);
+
+                    // Create a marker for the end point:
+                    const endMarker = new H.map.Marker(destination);
+
+                    // Create a H.map.Group to hold all the map objects and enable us to obtain 
+                    // the bounding box that contains all its objects within
+                    const group = new H.map.Group();
+                    group.addObjects([routeLine, startMarker, endMarker]);
+                    // Add the group to the map
+                    map.addObject(group);
+                    map.removeObject(prevgroup);
+                    prevgroup = group;
+
+                    // Set the map viewport to make the entire route visible:
+                    map.getViewModel().setLookAtData({
+                        bounds: group.getBoundingBox()
+                    });
+                };
+            };
+
+            // Get an instance of the routing service version 8:
+            const router = platform.getRoutingService(null, 8);
+
+            // Call the calculateRoute() method with the routing parameters,
+            // the callback, and an error callback function (called if a
+            // communication error occurs):
+            router.calculateRoute(routingParameters, onResult,
+                function (error) {
+                    alert(error.message);
+                });
+
+            // MapEvents enables the event system.
+            // The behavior variable implements default interactions for pan/zoom (also on mobile touch environments).
+            const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+            // Enable dynamic resizing of the map, based on the current size of the enclosing container
+            window.addEventListener('resize', () => map.getViewPort().resize());
+        }
+    </script>
+</body>
+
+</html>

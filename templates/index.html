@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HungryHere | Fastest Online Food Delivery</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai|Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+</head>
+
+<body class="font-sans">
+    <!-- This is an example component -->
+    <div class="bg-grayDark" x-data="{ atTop: true }"
+        x-on:scroll.window="atTop =( window.pageYOffset > 10) ? false : true ">
+        <!-- Navbar -->
+        <div class="w-full text-gray-700 bg-white h-20 fixed top-0 animated z-40"
+            x-bind:class='{ "bg-black shadow-lg": !atTop }'>
+            <div x-data="{ open: false }"
+                class="flex flex-col max-w-screen-xl px-2 mx-auto md:items-center md:justify-between md:flex-row">
+                <div class="p-4 flex flex-row items-center justify-between">
+                    <a href="#" class="tracking-widest rounded-lg focus:outline-none focus:shadow-outline">
+                        <div  class="flex item-center justify-cen" id="logo">
+                            <img src="{{ url_for('static', filename='logo.png')}}" alt="HungryHere" class="h-12">
+                        </div>
+                    </a>
+                    <!-- Button Mobile Nav -->
+                    <button class="md:hidden rounded-lg focus:outline-none focus:shadow-outline" @click="open = !open">
+                        <span class="text-lg text-primary"><i class="fas fa-bell"></i></span>
+                    </button>
+                    <!-- End Button Mobile Nav -->
+                </div>
+                <!-- Navbar Mobile -->
+                <nav :class="{'flex': open, 'hidden': !open}"
+                    class="flex-col flex-grow pb-4 hidden bg-white shadow-lg rounded-b">
+                    <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                        href="#">Notification 1</a>
+                    <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                        href="#">Notification 2</a>
+                    <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                        href="#">Notification 3</a>
+                    <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                        href="#">Notification 4</a>
+                </nav>
+                <!-- End Navbar Mobile -->
+                <nav class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row bg-white">
+                    <a class="flex items-center px-3 py-1 mt-2 text-lg font-semibold text-primary rounded-lg md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                        href="#">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                        <button @click="open = !open"
+                            class="flex flex-row items-center w-full px-3 py-1 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:mt-0 md:ml-2 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                            <span class="text-lg text-primary"><i class="fas fa-bell"></i></span>
+                        </button>
+                        <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class="absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                            <div class="px-2 py-2 bg-white rounded-md shadow">
+                                <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                                    href="#">Notification #1</a>
+                                <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover
+            :text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                                    href="#">Notification #2</a>
+                                <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                                    href="#">Notification #3</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                        <button @click="open = !open"
+                            class="flex flex-row items-center w-full px-1 py-1 mt-2 text-sm font-semibold text-left bg-transparent rounded-full md:w-auto md:mt-0 md:ml-2 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                            <img src="{{ url_for('static', filename='logo.png')}}" class="w-auto h-6 rounded-full"
+                                alt="" />
+                        </button>
+                        <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class="absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                            <div class="px-2 py-2 bg-white rounded-md shadow">
+                                <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                                    href="#">Services</a>
+                                <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                                    href="#">Client</a>
+                                <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                                    href="#">Chat</a>
+                                <a class="block px-4 py-2 mt-2  bg-transparent rounded-lg  text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                                    href="#">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>       
+            </div>        
+        </div>
+        <br>
+        <!-- End Navbar -->
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+
+        <!-- Home Section -->
+        <section id="home" class="my-10 px-4 py-12 bg-gray-100">
+            <div class="container mx-auto text-center">
+                <h1 class="text-5xl text-gray-800 font-serif mb-4">Fastest Food Delivery</h1>
+                <p class="text-xl text-blue-500 mb-4">By leveraging modern technology and HERE maps</p>
+                <p class="text-xl text-blue-500 mb-8">Presenting you the fastest food delivery platform</p>
+                <a href="/login"
+                    class="btn bg-black text-white py-2 px-6 rounded-full text-xl hover:bg-white hover:text-brown transition duration-300 ease-in-out">Order
+                    Now</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services-container" class="px-4 py-12 bg-gray-200">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl text-gray-800 font-serif mb-12">Our Services</h2>
+                <div class="flex flex-wrap justify-center -mx-4">
+                    <div class="box w-full md:w-1/3 px-4 mb-8">
+                        <img src="{{ url_for('static', filename='1.png')}}" alt="" class="mx-auto mb-4">
+                        <h3 class="text-2xl text-gray-800 font-serif mb-2">Track Your Order</h3>
+                        <p class="text-lg text-gray-600 mb-4">Track your order in real-time with our advanced tracking
+                            system.</p>
+                    </div>
+                    <div class="box w-full md:w-1/3 px-4 mb-8">
+                        <img src="{{ url_for('static', filename='3.png')}}" alt="" class="mx-auto mb-4">
+                        <h3 class="text-2xl text-gray-800 font-serif mb-2">Optimized Routes</h3>
+                        <p class="text-lg text-gray-600 mb-4">Efficient routing system for our delivery partners,
+                            ensuring timely deliveries.</p>
+                    </div>
+                    <div class="box w-full md:w-1/3 px-4 mb-8">
+                        <img src="{{ url_for('static', filename='2.png')}}" alt="" class="mx-auto mb-4">
+                        <h3 class="text-2xl text-gray-800 font-serif mb-2">Food Ordering</h3>
+                        <p class="text-lg text-gray-600 mb-4">Convenient food ordering platform with access to nearby
+                            restaurants.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clients Section -->
+        <section id="client-section" class="px-4 py-12 bg-gray-100">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl text-gray-800 font-serif mb-12">Our Clients</h2>
+                <div class="flex justify-center -mx-4">
+                    <div class="client-item mx-4">
+                        <img src="{{ url_for('static', filename='logo1.png')}}" alt="Our Client" class="h-24">
+                    </div>
+                    <div class="client-item mx-4">
+                        <img src="{{ url_for('static', filename='logo2.png')}}" alt="Our Client" class="h-24">
+                    </div>
+                    <div class="client-item mx-4">
+                        <img src="{{ url_for('static', filename='logo3.png')}}" alt="Our Client" class="h-24">
+                    </div>
+                    <div class="client-item mx-4">
+                        <img src="{{ url_for('static', filename='logo4.png')}}" alt="Our Client" class="h-24">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="px-4 py-12 bg-gray-200">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl text-gray-800 font-serif mb-12">Contact Us</h2>
+                <div id="contact-box" class="mx-auto max-w-lg">
+                    <form action="" class="text-left">
+                        <div class="form-group mb-6">
+                            <label for="name" class="block text-lg text-gray-800 mb-2">Name:</label>
+                            <input type="text" name="name" id="name" placeholder="Enter your name"
+                                class="w-full border border-gray-400 rounded-md py-2 px-4 text-lg">
+                        </div>
+                        <div class="form-group mb-6">
+                            <label for="email" class="block text-lg text-gray-800 mb-2">Email:</label>
+                            <input type="email" name="email" id="email" placeholder="Enter your email"
+                                class="w-full border border-gray-400 rounded-md py-2 px-4 text-lg">
+                        </div>
+                        <div class="form-group mb-6">
+                            <label for="phone" class="block text-lg text-gray-800 mb-2">Phone Number:</label>
+                            <input type="phone" name="phone" id="phone" placeholder="Enter your phone"
+                                class="w-full border border-gray-400 rounded-md py-2 px-4 text-lg">
+                        </div>
+                        <div class="form-group mb-6">
+                            <label for="message" class="block text-lg text-gray-800 mb-2">Message:</label>
+                            <textarea name <textarea name="message" id="message" cols="30" rows="5"
+                                placeholder="Enter your message"
+                                class="w-full border border-gray-400 rounded-md py-2 px-4 text-lg"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="btn bg-black text-white py-2 px-6 rounded-full text-lg hover:bg-white hover:text-brown transition duration-300 ease-in-out">Send
+                            Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-6 bg-black text-white text-center">
+            <div class="container mx-auto">
+                <p>&copy; 2024 FOOD IN MINUTES. All rights reserved.</p>
+            </div>
+        </footer>
+
+</body>
+
+</html>
